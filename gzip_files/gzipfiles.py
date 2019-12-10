@@ -24,7 +24,7 @@
 # IN THE SOFTWARE.
 
 """
-This program will gzip in a parellel files from the file system individually
+This program will gzip files in parallel
 make sure you pass "*.json" with quote marks or this will not work!
 ./gzipfiles.py "*.json"
 """
