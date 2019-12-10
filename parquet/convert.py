@@ -46,7 +46,7 @@ if __name__ == "__main__":
         print ("converting file " + each + " to parquet format...")
         filename = each.split(".")
         filename1 = filename
-        filename1 = "./" + sys.argv[1] + "-" + filename[1] + ".parquet" 
+        filename1 = "./" + sys.argv[1] + "-" + filename[0] + ".parquet" 
         dataDF = spark.read.json(each)
         dataDF.write.parquet(filename1)
 
