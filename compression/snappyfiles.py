@@ -51,7 +51,7 @@ if __name__ == "__main__":
     commands = []
 
     for each in files:
-        filename = command1.split(" ")
+        filename = each.split(" ")
         commands.append("python3 -m snappy -c " + each + " " + filename + ".snappy")
     
     num_of_cpu = cpu_count()
