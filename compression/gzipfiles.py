@@ -26,7 +26,9 @@
 """
 This program will gzip files in parallel
 make sure you pass "*.json" with quote marks or this will not work!
-./gzipfiles.py "*.json"
+fast will compress with standard settings and best will gzip -9
+./gzipfiles.py "*.json" fast
+./gzipfiles.py "*.json" best
 """
 
 import glob
@@ -49,7 +51,10 @@ if __name__ == "__main__":
     commands = []
 
     for each in files:
-        commands.append("gzip -9 " + each)
+        if sys.argv[2] == "best":
+            commands.append("gzip -9 " + each)
+        else:
+             commands.append("gzip " + each)
     
     num_of_cpu = cpu_count()
 
