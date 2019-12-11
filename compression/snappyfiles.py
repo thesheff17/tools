@@ -65,4 +65,4 @@ if __name__ == "__main__":
     stop = timeit.default_timer()
 
     print ('Total time in seconds: ', stop - start)  
-    print ("gzipfiles.py completed")
+    print ("snappyfiles.py completed")
