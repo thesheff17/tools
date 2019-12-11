@@ -44,15 +44,10 @@ def processfiles(command1):
     subprocess.run(command1, shell=True)
 
 if __name__ == "__main__":
-
-
     start = timeit.default_timer()
-
     files = glob.glob(sys.argv[1])
-
     commands = []
 
-    # build list of commands
     for each in files:
         commands.append("gzip -9 " + each)
     
