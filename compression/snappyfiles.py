@@ -43,7 +43,7 @@ import timeit
 
 def processfiles(command1):
     command2 = command1.split(" ")
-    print ("compressing " + filename[-2])
+    print ("compressing " + command2[-2])
     subprocess.run(command1, shell=True)
 
 if __name__ == "__main__":
