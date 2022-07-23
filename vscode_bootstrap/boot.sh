@@ -64,6 +64,7 @@ sudo apt-get install -yq \
 FILE1=/home/vscode/.pyenv/libexec/pyenv
 if [ ! -f $FILE1 ]
 then
+    echo "installing latest python version with pyenv..."
 	# cat pyenvbash >> ~/.bashrc
 	curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
 	# source ~/.bashrc
@@ -89,6 +90,7 @@ fi
 FILE2=/usr/local/go/bin/go
 if [ ! -f $FILE2 ]
 then
+    echo "installing golang..."
 	# detects arch for running on M1 macs laptops
     if [ $arch == "aarch64" ]; then
         wget https://go.dev/dl/$goversion.linux-arm64.tar.gz
@@ -102,6 +104,18 @@ then
 else
     echo "golang already installed..."
 fi
+
+# install vim-go plugin
+FILE3=~/.vim/pack/plugins/start/vim-go
+if [ ! -f $FILE3 ]
+then
+    echo "installing vim-go plugin..."
+	git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
+    export PATH=$PATH:/usr/local/go/bin && vim -esN +GoInstallBinaries +q
+else
+	echo "vim-go plugin already installed..."
+fi
+
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
