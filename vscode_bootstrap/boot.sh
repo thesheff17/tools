@@ -110,12 +110,20 @@ FILE3=~/.vim/pack/plugins/start/vim-go
 if [ ! -f $FILE3 ]
 then
     echo "installing vim-go plugin..."
-	git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
+    git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
     export PATH=$PATH:/usr/local/go/bin && vim -esN +GoInstallBinaries +q
 else
-	echo "vim-go plugin already installed..."
+    echo "vim-go plugin already installed..."
 fi
 
+# installing rust 
+FILE4=~/.cargo/env
+if [ ! -f $FILE4 ]
+then
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+else
+    echo "rust already installed..."
+fi
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
