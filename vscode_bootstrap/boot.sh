@@ -28,8 +28,8 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-pythonversion=`cat pythonversion.txt`
-goversion=`cat goversion.txt`
+pythonversion="3.9.13 3.10.5 3.11.0b4 pypy3.9-7.3.9"
+goversion="go1.18.4"
 arch=`uname -m`
 
 # apt-get
@@ -74,14 +74,16 @@ then
     echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
     echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 
-	# install python
-	export PYENV_ROOT="$HOME/.pyenv" && \
-	export PATH="$PYENV_ROOT/bin:$PATH" && \
-	eval "$(pyenv init --path)" && \
-	eval "$(pyenv init -)" && \
-	pyenv install $pythonversion
+    for val in $pythonversion; do
+        # install python
+        export PYENV_ROOT="$HOME/.pyenv" && \
+        export PATH="$PYENV_ROOT/bin:$PATH" && \
+        eval "$(pyenv init --path)" && \
+        eval "$(pyenv init -)" && \
+        pyenv install $val
 
-	sudo ln -s /home/vscode/.pyenv/versions/$pythonversion/bin/python3 /usr/local/bin/$pythonversion
+        sudo ln -s /home/vscode/.pyenv/versions/$val/bin/python3 /usr/local/bin/python-$val
+    done
 else
 	echo "skipping installation .pyenv exists.  delete this and the symlink to run again..."
 fi
