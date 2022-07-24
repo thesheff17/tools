@@ -94,7 +94,7 @@ sudo apt-get install -yq \
 
 cpucount=`grep -c processor /proc/cpuinfo`
 for val in $pythonversion; do
-    wget https://www.python.org/ftp/python/$val/Python-$val.tar.xz
+    wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
     tar -xf Python-$val.tar.xz
     cd Python-$val
 
@@ -113,11 +113,11 @@ then
     echo "installing golang..."
 	# detects arch for running on M1 macs laptops
     if [ $arch == "aarch64" ]; then
-        wget https://go.dev/dl/$goversion.linux-arm64.tar.gz
+        wget -q https://go.dev/dl/$goversion.linux-arm64.tar.gz
         sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf $goversion.linux-arm64.tar.gz
         echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
     else
-        wget https://go.dev/dl/$goversion.linux-amd64.tar.gz
+        wget -q https://go.dev/dl/$goversion.linux-amd64.tar.gz
         sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf $goversion.linux-amd64.tar.gz
         echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
     fi
