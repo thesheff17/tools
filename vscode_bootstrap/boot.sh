@@ -28,7 +28,8 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-pythonversion="3.9.13 3.10.5 3.11.0b4 pypy3.9-7.3.9"
+# pythonversion="3.9.13 3.10.5 3.11.0b4 pypy3.9-7.3.9"
+pythonversion="3.9.13"
 goversion="go1.18.4"
 arch=`uname -m`
 
@@ -62,32 +63,48 @@ sudo apt-get install -yq \
 # this will kinda check if this script already ran
 # if you want to run this part remove .pyenv folder
 # also remove symlink generated below.
-FILE1=/home/vscode/.pyenv/libexec/pyenv
-if [ ! -f $FILE1 ]
-then
-    echo "installing latest python version with pyenv..."
-	# cat pyenvbash >> ~/.bashrc
-	curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-	# source ~/.bashrc
 
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-    echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
-    echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+# all of a sudden pyenv SSL cert start failing.
+# FILE1=/home/vscode/.pyenv/libexec/pyenv
+# if [ ! -f $FILE1 ]
+# then
+#     echo "installing latest python version with pyenv..."
+# 	# cat pyenvbash >> ~/.bashrc
+# 	curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
+# 	# source ~/.bashrc
 
-    for val in $pythonversion; do
-        # install python
-        export PYENV_ROOT="$HOME/.pyenv" && \
-        export PATH="$PYENV_ROOT/bin:$PATH" && \
-        eval "$(pyenv init --path)" && \
-        eval "$(pyenv init -)" && \
-        pyenv install $val
+#     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+#     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+#     echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
+#     echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 
-        sudo ln -s /home/vscode/.pyenv/versions/$val/bin/python3 /usr/local/bin/python-$val
-    done
-else
-	echo "skipping installation .pyenv exists.  delete this and the symlink to run again..."
-fi
+#     for val in $pythonversion; do
+#         # install python
+#         export PYENV_ROOT="$HOME/.pyenv" && \
+#         export PATH="$PYENV_ROOT/bin:$PATH" && \
+#         eval "$(pyenv init --path)" && \
+#         eval "$(pyenv init -)" && \
+#         pyenv install $val
+
+#         sudo ln -s /home/vscode/.pyenv/versions/$val/bin/python3 /usr/local/bin/python-$val
+#     done
+# else
+# 	echo "skipping installation .pyenv exists.  delete this and the symlink to run again..."
+# fi
+
+cpucount=`grep -c processor /proc/cpuinfo`
+for val in $pythonversion; do
+    wget https://www.python.org/ftp/python/$val/Python-$val.tar.xz
+    tar -xf Python-$val.tar.xz
+    cd Python-$val
+
+    # why you should use enable optimzations
+    # https://bugs.python.org/issue24915
+    ./configure --enable-optimizations
+    make -j $cpucount
+    make install
+    cd ../
+done
 
 # install golang
 FILE2=/usr/local/go/bin/go
