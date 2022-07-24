@@ -50,6 +50,7 @@ sudo apt-get install -yq \
     libsqlite3-dev \
     libssl-dev \
     llvm \
+    locate \
     openjdk-11-jdk \
     python3-dev \
     python3-pip \
@@ -137,6 +138,9 @@ then
 else
     echo "ruby/rails already installed..."
 fi
+
+echo "building search index..."
+sudo updatedb
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
