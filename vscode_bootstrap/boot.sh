@@ -136,7 +136,7 @@ then
     curl -sSL https://get.rvm.io | bash -s stable --rails
 
     # special case to see if root is running this script
-    if [ $USER != "root" ]; then
+    if [[ $EUID -eq 0 ]]; then
         echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
     else
         echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
