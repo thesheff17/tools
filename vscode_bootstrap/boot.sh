@@ -49,6 +49,7 @@ sudo apt-get install -yq \
     libsqlite3-dev \
     libssl-dev \
     llvm \
+    openjdk-11-jdk \
     python3-dev \
     python3-pip \
     tk-dev \
@@ -125,6 +126,29 @@ then
     curl https://sh.rustup.rs -sSf | sh -s -- -y
 else
     echo "rust already installed..."
+fi
+
+# nodejs
+FILE5=/tmp/nodesource_setup.sh
+if [ ! -f $FILE5 ]
+then
+    curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
+    sudo bash /tmp/nodesource_setup.sh
+else
+    echo "nodejs already looks to be installed..."
+fi
+
+# ruby/rvm
+FILE6=~/.rvm/VERSION
+if [ ! -f $FILE6 ]
+then
+    curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+    curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
+    curl -sSL https://get.rvm.io | bash -s stable --ruby
+    curl -sSL https://get.rvm.io | bash -s stable --rails
+    echo "source $HOME/.rvm/scripts/rvm" >> ~/.bash_profile
+else
+    echo "ruby/rails already installed..."
 fi
 
 duration=$SECONDS
