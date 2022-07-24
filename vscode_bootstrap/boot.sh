@@ -60,37 +60,6 @@ sudo apt-get install -yq \
     xz-utils \
     zlib1g-dev
 
-# this will kinda check if this script already ran
-# if you want to run this part remove .pyenv folder
-# also remove symlink generated below.
-
-# all of a sudden pyenv SSL cert start failing.
-# FILE1=/home/vscode/.pyenv/libexec/pyenv
-# if [ ! -f $FILE1 ]
-# then
-#     echo "installing latest python version with pyenv..."
-# 	# cat pyenvbash >> ~/.bashrc
-# 	curl -L https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash
-# 	# source ~/.bashrc
-
-#     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-#     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-#     echo 'eval "$(pyenv init --path)"' >> ~/.bashrc
-#     echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-
-#     for val in $pythonversion; do
-#         # install python
-#         export PYENV_ROOT="$HOME/.pyenv" && \
-#         export PATH="$PYENV_ROOT/bin:$PATH" && \
-#         eval "$(pyenv init --path)" && \
-#         eval "$(pyenv init -)" && \
-#         pyenv install $val
-
-#         sudo ln -s /home/vscode/.pyenv/versions/$val/bin/python3 /usr/local/bin/python-$val
-#     done
-# else
-# 	echo "skipping installation .pyenv exists.  delete this and the symlink to run again..."
-# fi
 
 cpucount=`grep -c processor /proc/cpuinfo`
 for val in $pythonversion; do
@@ -103,6 +72,7 @@ for val in $pythonversion; do
     ./configure --enable-optimizations
     make -j $cpucount
     make install
+    sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
     cd ../
 done
 
