@@ -134,7 +134,13 @@ then
     curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
     curl -sSL https://get.rvm.io | bash -s stable --ruby
     curl -sSL https://get.rvm.io | bash -s stable --rails
-    echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
+
+    # special case to see if root is running this script
+    if [ $USER != "root" ]; then
+        echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
+    else
+        echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
+    fi
 else
     echo "ruby/rails already installed..."
 fi
