@@ -33,127 +33,155 @@ pythonversion="3.11.0b3"
 goversion="go1.18.4"
 arch=`uname -m`
 
-# apt-get
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get install -yq \
-    build-essential \
-    curl \
-    gcc \
-    git \
-    libbz2-dev \
-    libffi-dev \
-    liblzma-dev \
-    libncurses5-dev \
-    libncursesw5-dev \
-    libreadline-dev \
-    libsqlite3-dev \
-    libssl-dev \
-    llvm \
-    locate \
-    openjdk-11-jdk \
-    python3-dev \
-    python3-pip \
-    tk-dev \
-    tmux \
-    vim \
-    wget \
-    xz-utils \
-    zlib1g-dev
+apt_get_install() {
+    # apt-get
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get install -yq \
+        build-essential \
+        curl \
+        g++ \
+        gcc \
+        git \
+        libbz2-dev \
+        libffi-dev \
+        liblzma-dev \
+        libncurses5-dev \
+        libncursesw5-dev \
+        libreadline-dev \
+        libsqlite3-dev \
+        libssl-dev \
+        llvm \
+        locate \
+        make \
+        openjdk-11-jdk \
+        python3-dev \
+        python3-pip \
+        tk-dev \
+        tmux \
+        vim \
+        wget \
+        xz-utils \
+        zlib1g-dev
+}
 
-# installing python manually
-cpucount=`grep -c processor /proc/cpuinfo`
-for val in $pythonversion; do
-   
-    # beta links are different 
-    if grep -q "b" <<< "$val"; then
-        wget -q https://www.python.org/ftp/python/3.11.0/Python-$val.tar.xz
+python_install() {
+    # installing python manually
+    cpucount=`grep -c processor /proc/cpuinfo`
+    for val in $pythonversion; do
+
+        # beta links are different
+        if grep -q "b" <<< "$val"; then
+            wget -q https://www.python.org/ftp/python/3.11.0/Python-$val.tar.xz
+        else
+            wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
+        fi
+
+        tar -xf Python-$val.tar.xz
+        cd Python-$val
+
+        # why you should use enable optimzations
+        # https://bugs.python.org/issue24915
+        ./configure --enable-optimizations
+        make -j $cpucount
+        sudo make install
+        # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
+        cd ../
+    done
+}
+
+golang_install() {
+    # install golang
+    FILE2=/usr/local/go/bin/go
+    if [ ! -f $FILE2 ]
+    then
+        echo "installing golang..."
+        # detects arch for running on M1 macs laptops
+        if [ $arch == "aarch64" ]; then
+            wget -q https://go.dev/dl/$goversion.linux-arm64.tar.gz
+            sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf $goversion.linux-arm64.tar.gz
+            echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+        else
+            wget -q https://go.dev/dl/$goversion.linux-amd64.tar.gz
+            sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf $goversion.linux-amd64.tar.gz
+            echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+        fi
     else
-        wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
+        echo "golang already installed..."
     fi
-    
-    tar -xf Python-$val.tar.xz
-    cd Python-$val
+}
 
-    # why you should use enable optimzations
-    # https://bugs.python.org/issue24915
-    ./configure --enable-optimizations
-    make -j $cpucount
-    sudo make install
-    # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
-    cd ../
-done
-
-# install golang
-FILE2=/usr/local/go/bin/go
-if [ ! -f $FILE2 ]
-then
-    echo "installing golang..."
-	# detects arch for running on M1 macs laptops
-    if [ $arch == "aarch64" ]; then
-        wget -q https://go.dev/dl/$goversion.linux-arm64.tar.gz
-        sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf $goversion.linux-arm64.tar.gz
-        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+vim_go_install() {
+    # install vim-go plugin
+    FILE3=~/.vim/pack/plugins/start/vim-go
+    if [ ! -f $FILE3 ]
+    then
+        echo "installing vim-go plugin..."
+        git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
+        export PATH=$PATH:/usr/local/go/bin && vim -esN +GoInstallBinaries +q
     else
-        wget -q https://go.dev/dl/$goversion.linux-amd64.tar.gz
-        sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf $goversion.linux-amd64.tar.gz
-        echo 'export PATH=$PATH:/usr/local/go/bin' >> ~/.bashrc
+        echo "vim-go plugin already installed..."
     fi
-else
-    echo "golang already installed..."
-fi
 
-# install vim-go plugin
-FILE3=~/.vim/pack/plugins/start/vim-go
-if [ ! -f $FILE3 ]
-then
-    echo "installing vim-go plugin..."
-    git clone https://github.com/fatih/vim-go.git ~/.vim/pack/plugins/start/vim-go
-    export PATH=$PATH:/usr/local/go/bin && vim -esN +GoInstallBinaries +q
-else
-    echo "vim-go plugin already installed..."
-fi
-
-# installing rust 
-FILE4=~/.cargo/env
-if [ ! -f $FILE4 ]
-then
-    curl https://sh.rustup.rs -sSf | sh -s -- -y
-else
-    echo "rust already installed..."
-fi
-
-# nodejs
-FILE5=/tmp/nodesource_setup.sh
-if [ ! -f $FILE5 ]
-then
-    curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
-    sudo bash /tmp/nodesource_setup.sh
-else
-    echo "nodejs already looks to be installed..."
-fi
-
-# ruby/rvm
-FILE6=~/.rvm/VERSION
-if [ ! -f $FILE6 ]
-then
-    curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
-    curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
-    curl -sSL https://get.rvm.io | bash -s stable --ruby
-    curl -sSL https://get.rvm.io | bash -s stable --rails
-
-    # special case to see if root is running this script
-    if [[ $EUID -eq 0 ]]; then
-        echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
+    # installing rust
+    FILE4=~/.cargo/env
+    if [ ! -f $FILE4 ]
+    then
+        curl https://sh.rustup.rs -sSf | sh -s -- -y
     else
-        echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
+        echo "rust already installed..."
     fi
-else
-    echo "ruby/rails already installed..."
-fi
+}
 
-echo "building search index..."
-sudo updatedb
+nodejs_install() {
+    # nodejs
+    FILE5=/tmp/nodesource_setup.sh
+    if [ ! -f $FILE5 ]
+    then
+        curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
+        sudo bash /tmp/nodesource_setup.sh
+        sudo apt-get install -y nodejs
+        curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
+        echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+        sudo apt-get update && sudo apt-get install yarn
+    else
+        echo "nodejs already looks to be installed..."
+    fi
+}
+
+ruby_rails_install() {
+    # ruby/rvm
+    FILE6=~/.rvm/VERSION
+    if [ ! -f $FILE6 ]
+    then
+        curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -
+        curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import -
+        curl -sSL https://get.rvm.io | bash -s stable --ruby
+        curl -sSL https://get.rvm.io | bash -s stable --rails
+
+        # special case to see if root is running this script
+        if [[ $EUID -eq 0 ]]; then
+            echo "source /usr/local/rvm/scripts/rvm" >> ~/.bashrc
+        else
+            echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
+        fi
+    else
+        echo "ruby/rails already installed..."
+    fi
+}
+
+build_index() {
+    echo "building search index..."
+    sudo updatedb
+}
+
+apt_get_install
+python_install
+golang_install
+vim_go_install
+nodejs_install
+ruby_rails_install
+build_index
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
