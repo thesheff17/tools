@@ -64,7 +64,14 @@ sudo apt-get install -yq \
 
 cpucount=`grep -c processor /proc/cpuinfo`
 for val in $pythonversion; do
-    wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
+   
+    # beta links are different 
+    if grep -q "b" <<< "$val"; then
+        wget -q https://www.python.org/ftp/python/3.11.0/Python-$val.tar.xz
+    else
+        wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
+    fi
+    
     tar -xf Python-$val.tar.xz
     cd Python-$val
 
