@@ -27,6 +27,8 @@ golang/version1/map.txt
 golang/version1/version1
 golang/version2/version2
 golnag/version3/version3
+vscode_bootstrap/Python*
+vscode_bootstrap/go*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

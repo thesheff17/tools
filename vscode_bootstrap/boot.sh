@@ -79,7 +79,7 @@ for val in $pythonversion; do
     # https://bugs.python.org/issue24915
     ./configure --enable-optimizations
     make -j $cpucount
-    make install
+    sudo make install
     # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
     cd ../
 done
