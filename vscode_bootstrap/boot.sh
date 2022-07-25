@@ -175,6 +175,18 @@ build_index() {
     sudo updatedb
 }
 
+check_versions() {
+    node --version
+    yarn --version
+    npm --version
+    python3 --version
+    go version
+    rails --version
+    ruby --version
+    rustc --version
+    java --version
+}
+
 apt_get_install
 python_install
 golang_install
@@ -182,6 +194,7 @@ vim_go_install
 nodejs_install
 ruby_rails_install
 build_index
+check_versions
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
