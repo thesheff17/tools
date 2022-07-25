@@ -176,15 +176,33 @@ build_index() {
 }
 
 check_versions() {
+    echo "node version: "
     node --version
+    echo "yarn version: "
     yarn --version
+    echo "npm version: "
     npm --version
+    echo "python version: "
     python3 --version
+    echo "go version: "
     go version
-    rails --version
-    ruby --version
-    rustc --version
+    echo "java version: "
     java --version
+
+    # checking for rails/ruby
+    if [[ $EUID -eq 0 ]]; then
+        echo "rails version: "
+        source /usr/local/rvm/scripts/rvm && rails --version
+        echo "ruby version: "
+        source /usr/local/rvm/scripts/rvm && ruby --version
+    else
+        echo "rails version: "
+        source $HOME/.rvm/scripts/rvm && rails --version
+        echo "ruby version: "
+        source $HOME/.rvm/scripts/rvm && ruby --version
+    fi
+    echo "rust version: "
+    $HOME/.cargo/bin/rustc --version
 }
 
 apt_get_install
