@@ -28,8 +28,8 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-# pythonversion="3.9.13 3.10.5 3.11.0b4 pypy3.9-7.3.9"
-pythonversion="3.9.13"
+# pythonversion="3.9.13 3.10.5 3.11.0b3 pypy3.9-7.3.9"
+pythonversion="3.11.0b3"
 goversion="go1.18.4"
 arch=`uname -m`
 
@@ -61,7 +61,7 @@ sudo apt-get install -yq \
     xz-utils \
     zlib1g-dev
 
-
+# installing python manually
 cpucount=`grep -c processor /proc/cpuinfo`
 for val in $pythonversion; do
    
@@ -80,7 +80,7 @@ for val in $pythonversion; do
     ./configure --enable-optimizations
     make -j $cpucount
     make install
-    sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
+    # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
     cd ../
 done
 
