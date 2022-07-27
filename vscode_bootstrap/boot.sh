@@ -43,6 +43,7 @@ apt_get_install() {
         g++ \
         gcc \
         git \
+        gnupg \
         libbz2-dev \
         libffi-dev \
         liblzma-dev \
@@ -57,6 +58,7 @@ apt_get_install() {
         openjdk-11-jdk \
         python3-dev \
         python3-pip \
+        software-properties-common \
         tk-dev \
         tmux \
         vim \
@@ -170,6 +172,18 @@ ruby_rails_install() {
     fi
 }
 
+terraform_install() {
+    wget -O- https://apt.releases.hashicorp.com/gpg | \
+    gpg --dearmor | \
+    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+    sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update
+    sudo apt-get -y install terraform
+}
+
 build_index() {
     echo "building search index..."
     sudo updatedb
@@ -188,6 +202,8 @@ check_versions() {
     go version
     echo "java version: "
     java --version
+    echo "terraform version: "
+    terraform --version
 
     # checking for rails/ruby
     if [[ $EUID -eq 0 ]]; then
@@ -211,8 +227,10 @@ golang_install
 vim_go_install
 nodejs_install
 ruby_rails_install
+terraform_install
 build_index
 check_versions
+
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
