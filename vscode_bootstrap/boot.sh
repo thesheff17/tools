@@ -31,6 +31,7 @@ echo "dockervscode_bootstrap.sh started..."
 # pythonversion="3.9.13 3.10.5 3.11.0b3 pypy3.9-7.3.9"
 pythonversion="3.11.0b3"
 goversion="go1.18.4"
+terraformversion="1.2.6"
 arch=`uname -m`
 
 apt_get_install() {
@@ -173,15 +174,22 @@ ruby_rails_install() {
 }
 
 terraform_install() {
-    wget -O- https://apt.releases.hashicorp.com/gpg | \
-    gpg --dearmor | \
-    sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    FILE7=/usr/bin/terraform
+    if [ ! -f $FILE7 ]
+    then
 
-    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-    https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-    sudo tee /etc/apt/sources.list.d/hashicorp.list
-    sudo apt update
-    sudo apt-get -y install terraform
+        if [ $arch == "aarch64" ]; then
+            wget -q https://releases.hashicorp.com/terraform/$terraformversion/terraform_"$terraformversion"_linux_arm64.zip
+            unzip terraform_"$terraformversion"_linux_arm64.zip
+            sudo mv terraform /usr/bin/terraform
+        else
+            wget -q https://releases.hashicorp.com/terraform/$terraformversion/terraform_"$terraformversion"_linux_amd64.zip
+            unzip terraform_$terraformversion_linux_amd64.zip
+            sudo mv terraform /usr/bin/terraform
+        fi
+    else
+        echo "terraform binary found skipping install..."
+    fi
 }
 
 build_index() {
