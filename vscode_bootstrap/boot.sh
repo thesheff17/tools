@@ -49,9 +49,13 @@ sudo apt-get install -yq \
     libreadline-dev \
     libsqlite3-dev \
     libssl-dev \
+    curl \
+    gnupg2 \
+    gpg \
     llvm \
     locate \
     openjdk-11-jdk \
+    procps \
     python3-dev \
     python3-pip \
     tk-dev \
@@ -59,6 +63,7 @@ sudo apt-get install -yq \
     vim \
     wget \
     xz-utils \
+    zip \
     zlib1g-dev
 
 # installing python manually

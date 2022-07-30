@@ -10,9 +10,9 @@ FROM debian:10.12
 # time docker build . -t thesheff17/vscode:latest
 
 RUN  echo 'Acquire::http { Proxy "http://172.17.0.2:3142"; };' >> /etc/apt/apt.conf.d/01proxy
-RUN \
-  apt-get update && \
-  apt-get install -y sudo gpg curl gnupg2 procps
+# RUN \
+#  apt-get update && \
+#  apt-get install -y sudo gpg curl gnupg2 procps
 
 add ./boot.sh /root/
 RUN cd /root/ && ./boot.sh
