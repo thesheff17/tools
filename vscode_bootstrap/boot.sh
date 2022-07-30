@@ -173,7 +173,6 @@ ruby_rails_install() {
         else
             echo "source $HOME/.rvm/scripts/rvm" >> ~/.bashrc
         fi
->>>>>>> 76a298eff50f5a979e2f9048505e50aed66e935e
     else
         echo "ruby/rails already installed..."
     fi
