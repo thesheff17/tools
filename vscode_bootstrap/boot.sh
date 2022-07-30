@@ -191,7 +191,7 @@ terraform_install() {
             sudo mv terraform /usr/bin/terraform
         else
             wget -q https://releases.hashicorp.com/terraform/$terraformversion/terraform_"$terraformversion"_linux_amd64.zip
-            unzip terraform_$terraformversion_linux_amd64.zip
+            unzip terraform_"$terraformversion"_linux_amd64.zip
             sudo mv terraform /usr/bin/terraform
         fi
     else
