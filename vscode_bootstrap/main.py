@@ -1,4 +1,4 @@
-#!/usr/bin/env python-3.11.0b4
+#!/usr/bin/env python3.11
 
 x = 1
 while True:
