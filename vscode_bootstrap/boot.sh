@@ -66,7 +66,9 @@ apt_get_install() {
         software-properties-common \
         tk-dev \
         tmux \
+        unzip \
         vim \
+        wget \
         wget \
         xz-utils \
         zip \
