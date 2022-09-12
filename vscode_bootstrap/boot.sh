@@ -28,8 +28,8 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-# pythonversion="3.9.13 3.10.5 3.11.0b3 pypy3.9-7.3.9"
-pythonversion="3.11.0b3"
+pythonversion="3.11.0b3" # beta version
+# pythonversion="3.7.14" # non beta version
 goversion="go1.19.1"
 terraformversion="1.2.9"
 arch=`uname -m`
@@ -78,26 +78,28 @@ apt_get_install() {
 python_install() {
     # installing python manually
     cpucount=`grep -c processor /proc/cpuinfo`
-    for val in $pythonversion; do
+    
+    # check if we are using a beta version
+    if [[ 'b' == $pythonversion ]]; then
+        echo "configuring a beta version of python..."
+        sub=$(echo $pythonversion | cut -db -f1)
+        wget -q https://www.python.org/ftp/python/$sub/Python-$pythonversion.tar.xz
+       
+    else
+        echo "configuring a standard version of python..."
+        wget -q https://www.python.org/ftp/python/$pythonversion/Python-$pythonversion.tar.xz
+    fi
 
-        # beta links are different
-        if grep -q "b" <<< "$val"; then
-            wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
-        else
-            wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
-        fi
+    tar -xf Python-$pythonversion.tar.xz
+    cd Python-$pythonversion
 
-        tar -xf Python-$val.tar.xz
-        cd Python-$val
-
-        # why you should use enable optimzations
-        # https://bugs.python.org/issue24915
-        ./configure --enable-optimizations
-        make -j $cpucount
-        sudo make install
-        # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
-        cd ../
-    done
+    # why you should use enable optimzations
+    # https://bugs.python.org/issue24915
+    ./configure --enable-optimizations
+    make -j $cpucount
+    sudo make install
+    # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
+    cd ../
 }
 
 golang_install() {
