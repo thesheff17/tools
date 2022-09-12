@@ -23,6 +23,11 @@
 # IN THE SOFTWARE.
 
 # this will bootstrap a debian based docker container that vscode uses.
+
+# if see room for improments makes PR requests.  This is only tested
+# on a debian instance since that is the default vscode dev container docker 
+# uses. see Dockerfile for more info
+
 SECONDS=0
 
 clear
@@ -80,7 +85,7 @@ python_install() {
     cpucount=`grep -c processor /proc/cpuinfo`
     
     # check if we are using a beta version
-    if [[ 'b' == $pythonversion ]]; then
+    if grep -q "b" <<< "$pythonversion"; then
         echo "configuring a beta version of python..."
         sub=$(echo $pythonversion | cut -db -f1)
         wget -q https://www.python.org/ftp/python/$sub/Python-$pythonversion.tar.xz
@@ -241,7 +246,7 @@ check_versions() {
 }
 
 apt_get_install
-python_install
+# python_install
 golang_install
 vim_go_install
 rust_install
