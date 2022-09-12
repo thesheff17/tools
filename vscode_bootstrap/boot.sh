@@ -134,7 +134,7 @@ vim_go_install() {
     fi
 }
 
-rust_install {
+rust_install() {
     # installing rust
     FILE4=~/.cargo/env
     if [ ! -f $FILE4 ]
