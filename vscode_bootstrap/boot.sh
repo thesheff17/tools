@@ -39,10 +39,12 @@ goversion="go1.19.1"
 terraformversion="1.2.9"
 arch=`uname -m`
 
-apt_get_install() {
-    # apt-get
+apt_get_update() {
     sudo apt-get update
     sudo apt-get upgrade -y
+}
+
+apt_get_install() {
     sudo apt-get install -yq \
         build-essential \
         curl \
@@ -245,6 +247,7 @@ check_versions() {
     $HOME/.cargo/bin/rustc --version
 }
 
+apt_get_update
 apt_get_install
 # python_install
 golang_install
@@ -255,7 +258,6 @@ ruby_rails_install
 terraform_install
 build_index
 check_versions
-
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
