@@ -24,7 +24,7 @@
 
 # this will bootstrap a debian based docker container that vscode uses.
 
-# if see room for improments makes PR requests.  This is only tested
+# if see room for improvements make a PR on github.  This is only tested
 # on a debian instance since that is the default vscode dev container docker 
 # uses. see Dockerfile for more info
 
