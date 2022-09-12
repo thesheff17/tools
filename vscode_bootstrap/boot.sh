@@ -30,8 +30,8 @@ echo "dockervscode_bootstrap.sh started..."
 
 # pythonversion="3.9.13 3.10.5 3.11.0b3 pypy3.9-7.3.9"
 pythonversion="3.11.0b3"
-goversion="go1.18.4"
-terraformversion="1.2.6"
+goversion="go1.19.1"
+terraformversion="1.2.9"
 arch=`uname -m`
 
 apt_get_install() {
@@ -82,7 +82,7 @@ python_install() {
 
         # beta links are different
         if grep -q "b" <<< "$val"; then
-            wget -q https://www.python.org/ftp/python/3.11.0/Python-$val.tar.xz
+            wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
         else
             wget -q https://www.python.org/ftp/python/$val/Python-$val.tar.xz
         fi
