@@ -132,7 +132,9 @@ vim_go_install() {
     else
         echo "vim-go plugin already installed..."
     fi
+}
 
+rust_install {
     # installing rust
     FILE4=~/.cargo/env
     if [ ! -f $FILE4 ]
@@ -240,6 +242,7 @@ apt_get_install
 python_install
 golang_install
 vim_go_install
+rust_install
 nodejs_install
 ruby_rails_install
 terraform_install
