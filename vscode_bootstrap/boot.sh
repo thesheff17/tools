@@ -33,10 +33,10 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-pythonversion="3.11.0b3" # beta version
+pythonversion="3.11.1" # beta version
 # pythonversion="3.10.7" # non beta version
-goversion="go1.19.1"
-terraformversion="1.2.9"
+goversion="go1.19.4"
+terraformversion="1.3.6"
 arch=`uname -m`
 
 apt_get_install() {
@@ -156,7 +156,7 @@ nodejs_install() {
     FILE5=/tmp/nodesource_setup.sh
     if [ ! -f $FILE5 ]
     then
-        curl -sL https://deb.nodesource.com/setup_16.x -o /tmp/nodesource_setup.sh
+        curl -sL https://deb.nodesource.com/setup_18.x -o /tmp/nodesource_setup.sh
         sudo bash /tmp/nodesource_setup.sh
         sudo apt-get install -y nodejs
         curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/yarnkey.gpg >/dev/null
@@ -245,7 +245,7 @@ check_versions() {
 }
 
 apt_get_install
-# python_install
+python_install
 golang_install
 vim_go_install
 rust_install
