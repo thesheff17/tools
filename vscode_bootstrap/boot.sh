@@ -33,8 +33,8 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-pythonversion="3.11.1" # beta version
-# pythonversion="3.10.7" # non beta version
+pythonversion="3.11.1"
+# pythonversion="3.10.7"
 goversion="go1.19.4"
 terraformversion="1.3.6"
 arch=`uname -m`
