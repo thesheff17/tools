@@ -34,6 +34,7 @@ clear
 echo "dockervscode_bootstrap.sh started..."
 
 pythonversion1="3.11.1"
+pythonversion2="3.10.9"
 goversion="go1.19.4"
 terraformversion="1.3.6"
 arch=`uname -m`
@@ -78,7 +79,7 @@ apt_get_install() {
         zlib1g-dev
 }
 
-python_install() {
+python_installA() {
     major=`echo $pythonversion1 | cut -d. -f1`
     minor=`echo $pythonversion1 | cut -d. -f2`
     revision=`echo $pythonversion1 | cut -d. -f3`
@@ -112,6 +113,43 @@ python_install() {
         cd ../
     else
         echo "python3.11.x already installed..."
+    fi
+}
+
+python_installB() {
+    major=`echo $pythonversion2 | cut -d. -f1`
+    minor=`echo $pythonversion2 | cut -d. -f2`
+    revision=`echo $pythonversion2 | cut -d. -f3`
+    FILEB="/usr/local/bin/python$major.$minor"
+    if [ ! -f $FILEB ]
+    then
+        echo "installing python3.10.x..."
+        # installing python manually
+        cpucount=`grep -c processor /proc/cpuinfo`
+
+        # check if we are using a beta version
+        if grep -q "b" <<< "$pythonversion2"; then
+            echo "configuring a beta version of python..."
+            sub=$(echo $pythonversion2 | cut -db -f1)
+            wget -q https://www.python.org/ftp/python/$sub/Python-$pythonversion2.tar.xz
+
+        else
+            echo "configuring a standard version of python..."
+            wget -q https://www.python.org/ftp/python/$pythonversion2/Python-$pythonversion2.tar.xz
+        fi
+
+        tar -xf Python-$pythonversion2.tar.xz
+        cd Python-$pythonversion2
+
+        # why you should use enable optimzations
+        # https://bugs.python.org/issue24915
+        ./configure --enable-optimizations
+        make -j $cpucount
+        sudo make altinstall
+        # ln -s "/com.docker.devenvironments.code/vscode_bootstrap/Python-$pythonversion2/python" "/usr/local/bin/python-$pythonversion2"
+        cd ../
+    else
+        echo "python3.10.x already installed..."
     fi
 }
 
@@ -262,7 +300,8 @@ check_versions() {
 }
 
 apt_get_install
-python_install
+python_installA
+python_installB
 golang_install
 vim_go_install
 rust_install
