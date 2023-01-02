@@ -25,7 +25,7 @@
 # this will bootstrap a debian based docker container that vscode uses.
 
 # if see room for improvements make a PR on github.  This is only tested
-# on a debian instance since that is the default vscode dev container docker 
+# on a debian instance since that is the default vscode dev container docker
 # uses. see Dockerfile for more info
 
 SECONDS=0
@@ -33,8 +33,8 @@ SECONDS=0
 clear
 echo "dockervscode_bootstrap.sh started..."
 
-pythonversion="3.11.1"
-# pythonversion="3.10.9"
+pythonversion1="3.11.1"
+pythonversion2="3.10.9"
 goversion="go1.19.4"
 terraformversion="1.3.6"
 arch=`uname -m`
@@ -79,31 +79,78 @@ apt_get_install() {
         zlib1g-dev
 }
 
-python_install() {
-    # installing python manually
-    cpucount=`grep -c processor /proc/cpuinfo`
-    
-    # check if we are using a beta version
-    if grep -q "b" <<< "$pythonversion"; then
-        echo "configuring a beta version of python..."
-        sub=$(echo $pythonversion | cut -db -f1)
-        wget -q https://www.python.org/ftp/python/$sub/Python-$pythonversion.tar.xz
-       
+python_install1() {
+    major=`echo $pythonversion1 | cut -d. -f1`
+    minor=`echo $pythonversion1 | cut -d. -f2`
+    revision=`echo $pythonversion1 | cut -d. -f3`
+    FILE1="/usr/local/bin/python$major.$minor"
+    if [ ! -f $FILE1 ]
+    then
+        echo "installing python3.11.x..."
+        # installing python manually
+        cpucount=`grep -c processor /proc/cpuinfo`
+
+        # check if we are using a beta version
+        if grep -q "b" <<< "$pythonversion1"; then
+            echo "configuring a beta version of python..."
+            sub=$(echo $pythonversion1 | cut -db -f1)
+            wget -q https://www.python.org/ftp/python/$sub/Python-$pythonversion1.tar.xz
+
+        else
+            echo "configuring a standard version of python..."
+            wget -q https://www.python.org/ftp/python/$pythonversion1/Python-$pythonversion1.tar.xz
+        fi
+
+        tar -xf Python-$pythonversion1.tar.xz
+        cd Python-$pythonversion1
+
+        # why you should use enable optimzations
+        # https://bugs.python.org/issue24915
+        ./configure --enable-optimizations
+        make -j $cpucount
+        sudo make install
+        # ln -s "/com.docker.devenvironments.code/vscode_bootstrap/Python-$pythonversion1/python" "/usr/local/bin/python-$pythonversion1"
+        cd ../
     else
-        echo "configuring a standard version of python..."
-        wget -q https://www.python.org/ftp/python/$pythonversion/Python-$pythonversion.tar.xz
+        echo "python3.11.x already installed..."
     fi
+}
 
-    tar -xf Python-$pythonversion.tar.xz
-    cd Python-$pythonversion
+python_install2() {
+    major=`echo $pythonversion2 | cut -d. -f1`
+    minor=`echo $pythonversion2 | cut -d. -f2`
+    revision=`echo $pythonversion2 | cut -d. -f3`
+    FILE1="/usr/local/bin/python$major.$minor"
+    if [ ! -f $FILE1 ]
+    then
+        echo "installing python3.10.x..."
+        # installing python manually
+        cpucount=`grep -c processor /proc/cpuinfo`
 
-    # why you should use enable optimzations
-    # https://bugs.python.org/issue24915
-    ./configure --enable-optimizations
-    make -j $cpucount
-    sudo make install
-    # sudo ln -s $HOME/Python-$var/python /usr/local/bin/python-$val
-    cd ../
+        # check if we are using a beta version
+        if grep -q "b" <<< "$pythonversion2"; then
+            echo "configuring a beta version of python..."
+            sub=$(echo $pythonversion2 | cut -db -f1)
+            wget -q https://www.python.org/ftp/python/$sub/Python-$pythonversion2.tar.xz
+
+        else
+            echo "configuring a standard version of python..."
+            wget -q https://www.python.org/ftp/python/$pythonversion2/Python-$pythonversion2.tar.xz
+        fi
+
+        tar -xf Python-$pythonversion2.tar.xz
+        cd Python-$pythonversion2
+
+        # why you should use enable optimzations
+        # https://bugs.python.org/issue24915
+        ./configure --enable-optimizations
+        make -j $cpucount
+        sudo make install
+        # ln -s "/com.docker.devenvironments.code/vscode_bootstrap/Python-$pythonversion2/python" "/usr/local/bin/python-$pythonversion2"
+        cd ../
+    else
+        echo "python3.11.x already installed..."
+    fi
 }
 
 golang_install() {
@@ -245,7 +292,8 @@ check_versions() {
 }
 
 apt_get_install
-python_install
+python_install1
+python_install2
 golang_install
 vim_go_install
 rust_install
