@@ -83,8 +83,8 @@ python_installA() {
     major=`echo $pythonversion1 | cut -d. -f1`
     minor=`echo $pythonversion1 | cut -d. -f2`
     revision=`echo $pythonversion1 | cut -d. -f3`
-    FILE1="/usr/local/bin/python$major.$minor"
-    if [ ! -f $FILE1 ]
+    FILEA="/usr/local/bin/python$major.$minor"
+    if [ ! -f $FILEA ]
     then
         echo "installing python3.11.x..."
         # installing python manually
@@ -120,8 +120,8 @@ python_installB() {
     major=`echo $pythonversion2 | cut -d. -f1`
     minor=`echo $pythonversion2 | cut -d. -f2`
     revision=`echo $pythonversion2 | cut -d. -f3`
-    FILE1="/usr/local/bin/python$major.$minor"
-    if [ ! -f $FILE1 ]
+    FILEB="/usr/local/bin/python$major.$minor"
+    if [ ! -f $FILEB ]
     then
         echo "installing python3.10.x..."
         # installing python manually
@@ -268,8 +268,6 @@ check_versions() {
     npm --version
     echo "python3 version: "
     python3 --version
-    echo "python3.10 version:"
-    python3.10 --version
     echo "python3.11 version:"
     python3.11 --version
     echo "go version: "
@@ -297,7 +295,7 @@ check_versions() {
 
 apt_get_install
 python_installA
-python_installB
+# python_installB
 golang_install
 vim_go_install
 rust_install
