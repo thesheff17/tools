@@ -31,7 +31,10 @@
 SECONDS=0
 
 clear
-echo "dockervscode_bootstrap.sh started..."
+echo "bootstrap.sh started..."
+
+currentdir=`passwd`
+echo "directory we are building in: $currentdir"
 
 pythonversion1="3.11.1"
 pythonversion2="3.10.9"
@@ -314,4 +317,4 @@ check_versions
 
 duration=$SECONDS
 echo "$(($duration / 60)) minutes and $(($duration % 60)) seconds elapsed."
-echo "dockervscode_bootstrap.sh completed."
+echo "bootstrap.sh completed."
