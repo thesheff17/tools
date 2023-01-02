@@ -33,7 +33,7 @@ SECONDS=0
 clear
 echo "bootstrap.sh started..."
 
-currentdir=`passwd`
+currentdir=`pwd`
 echo "directory we are building in: $currentdir"
 
 pythonversion1="3.11.1"
