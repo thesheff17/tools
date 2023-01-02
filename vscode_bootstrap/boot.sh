@@ -259,6 +259,10 @@ build_index() {
     sudo updatedb
 }
 
+vimrc() {
+    cp vimrc $HOME/.vimrc
+}
+
 check_versions() {
     echo "node version: "
     node --version
@@ -303,6 +307,7 @@ nodejs_install
 ruby_rails_install
 terraform_install
 build_index
+vimrc
 check_versions
 
 duration=$SECONDS
