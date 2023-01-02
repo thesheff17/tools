@@ -79,7 +79,7 @@ apt_get_install() {
         zlib1g-dev
 }
 
-python_install1() {
+python_installA() {
     major=`echo $pythonversion1 | cut -d. -f1`
     minor=`echo $pythonversion1 | cut -d. -f2`
     revision=`echo $pythonversion1 | cut -d. -f3`
@@ -116,7 +116,7 @@ python_install1() {
     fi
 }
 
-python_install2() {
+python_installB() {
     major=`echo $pythonversion2 | cut -d. -f1`
     minor=`echo $pythonversion2 | cut -d. -f2`
     revision=`echo $pythonversion2 | cut -d. -f3`
@@ -296,8 +296,8 @@ check_versions() {
 }
 
 apt_get_install
-python_install1
-python_install2
+python_installA
+python_installB
 golang_install
 vim_go_install
 rust_install
