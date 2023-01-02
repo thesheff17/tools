@@ -56,6 +56,7 @@ apt_get_install() {
         gnupg \
         gnupg2 \
         gpg \
+        htop \
         libbz2-dev \
         libffi-dev \
         liblzma-dev \
@@ -84,15 +85,16 @@ apt_get_install() {
 
 apt_get_install_small() {
     # this is experimental and will break builds below without
-    # apt_get_install()
+    # apt_get_install() use with caution
     sudo apt-get update
     sudo apt-get upgrade -y
     sudo apt-get install -yq \
         curl \
-        wim \
-        wget \
+        htop \
+        tmux \
         unzip \
-        tmux
+        wget \
+        wim
 }
 
 python_installA() {
