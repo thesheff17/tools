@@ -1,0 +1,4 @@
+### Please read before using any of this code:
+
+
+This program is completely experienmental and chances are it will break allot.  It completely depends on external scripts running correclty. Please make pull requests if you see things broken and make sure its not some external resource just not working.  I try not to break this script by running it a bunch with Dockerfile. There is also an architecture split now between ARM64 and x86 if you want to support m1 apple devices and graviton EC2 instances.  This makes it 2x harder to support.  Docker development containers currently default to debian buster.  See this video for how to use this script:
