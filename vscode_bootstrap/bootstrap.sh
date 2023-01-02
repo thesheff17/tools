@@ -257,6 +257,31 @@ terraform_install() {
     fi
 }
 
+awscli() {
+    FILE8=/usr/local/bin/aws
+    if [ ! -f $FILE8 ]
+    then
+
+        if [ $arch == "aarch64" ]; then
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+        else
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+        fi
+    else
+        echo "terraform binary found skipping install..."
+    fi
+}
+
+packer() {
+    wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    sudo apt update && sudo apt install packer
+}
+
 build_index() {
     echo "building search index..."
     sudo updatedb
@@ -267,26 +292,30 @@ vimrc() {
 }
 
 check_versions() {
-    echo "node version: "
+    echo "node version:"
     node --version
-    echo "yarn version: "
+    echo "yarn version:"
     yarn --version
-    echo "npm version: "
+    echo "npm version:"
     npm --version
-    echo "python3 version: "
+    echo "python3 version:"
     python3 --version
-    echo "python3.10 version: "
+    echo "python3.10 version:"
     python3.10 --version
     echo "python3.11 version:"
     python3.11 --version
-    echo "pip3 version: "
+    echo "pip3 version:"
     pip3 --version
-    echo "go version: "
+    echo "go version:"
     go version
-    echo "java version: "
+    echo "java version:"
     java --version
-    echo "terraform version: "
+    echo "terraform version:"
     terraform --version
+    echo "awscli version:"
+    /usr/local/bin/aws --version
+    echo "packer version:"
+    packer --version
 
     # checking for rails/ruby
     if [[ $EUID -eq 0 ]]; then
@@ -313,6 +342,8 @@ rust_install
 nodejs_install
 ruby_rails_install
 terraform_install
+awscli
+packer
 build_index
 vimrc
 check_versions

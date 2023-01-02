@@ -14,7 +14,7 @@ RUN \
     apt-get update && \
     apt-get install -y sudo
     
-add ./boot.sh /root/
-RUN cd /root/ && ./boot.sh
+add ./bootstrap.sh /root/
+RUN cd /root/ && ./bootstrap.sh
 
 CMD ["/bin/bash"]
