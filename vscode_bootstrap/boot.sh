@@ -266,8 +266,12 @@ check_versions() {
     yarn --version
     echo "npm version: "
     npm --version
-    echo "python version: "
+    echo "python3 version: "
     python3 --version
+    echo "python3.10 version:"
+    python3.10 --version
+    echo "python3.11 version:"
+    python3.11 --version
     echo "go version: "
     go version
     echo "java version: "
