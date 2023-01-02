@@ -275,6 +275,8 @@ check_versions() {
     npm --version
     echo "python3 version: "
     python3 --version
+    echo "python3.10 version: "
+    python3.10 --version
     echo "python3.11 version:"
     python3.11 --version
     echo "pip3 version: "
