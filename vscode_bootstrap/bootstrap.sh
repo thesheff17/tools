@@ -77,10 +77,22 @@ apt_get_install() {
         unzip \
         vim \
         wget \
-        wget \
         xz-utils \
         zip \
         zlib1g-dev
+}
+
+apt_get_install_small() {
+    # this is experimental and will break builds below without
+    # apt_get_install()
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get install -yq \
+        curl \
+        wim \
+        wget \
+        unzip \
+        tmux
 }
 
 python_installA() {
@@ -347,6 +359,7 @@ check_versions() {
 }
 
 apt_get_install
+# apt_get_install_small
 python_installA
 python_installB
 golang_install
