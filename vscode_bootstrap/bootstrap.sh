@@ -97,7 +97,7 @@ apt_get_install_small() {
         wim
 }
 
-python_installA() {
+python_install_a() {
     major=`echo $pythonversion1 | cut -d. -f1`
     minor=`echo $pythonversion1 | cut -d. -f2`
     revision=`echo $pythonversion1 | cut -d. -f3`
@@ -134,7 +134,7 @@ python_installA() {
     fi
 }
 
-python_installB() {
+python_install_b() {
     major=`echo $pythonversion2 | cut -d. -f1`
     minor=`echo $pythonversion2 | cut -d. -f2`
     revision=`echo $pythonversion2 | cut -d. -f3`
@@ -272,7 +272,7 @@ terraform_install() {
     fi
 }
 
-awscli() {
+awscli_install() {
     FILE8=/usr/local/bin/aws
     if [ ! -f $FILE8 ]
     then
@@ -291,7 +291,7 @@ awscli() {
     fi
 }
 
-packer() {
+packer_install() {
     FILE9=/usr/bin/packer
     if [ ! -f $FILE9 ]
     then
@@ -327,12 +327,12 @@ check_versions() {
     npm --version
     echo "python3 version:"
     python3 --version
+    echo "pip3 version:"
+    pip3 --version
     echo "python3.10 version:"
     python3.10 --version
     echo "python3.11 version:"
     python3.11 --version
-    echo "pip3 version:"
-    pip3 --version
     echo "go version:"
     go version
     echo "java version:"
@@ -360,18 +360,25 @@ check_versions() {
     $HOME/.cargo/bin/rustc --version
 }
 
+
+# comment out functions to speed up this script:
 apt_get_install
 # apt_get_install_small
-python_installA
-python_installB
+
+# python 3.11
+python_install_a
+
+# python 3.10
+python_install_b
+
 golang_install
 vim_go_install
 rust_install
 nodejs_install
 ruby_rails_install
 terraform_install
-awscli
-packer
+awscli_install
+packer_install
 build_index
 vimrc
 check_versions
