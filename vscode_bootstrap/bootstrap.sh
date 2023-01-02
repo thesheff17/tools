@@ -40,6 +40,7 @@ pythonversion1="3.11.1"
 pythonversion2="3.10.9"
 goversion="go1.19.4"
 terraformversion="1.3.6"
+packerversion="1.8.5"
 arch=`uname -m`
 
 apt_get_install() {
@@ -277,9 +278,21 @@ awscli() {
 }
 
 packer() {
-    wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
-    sudo apt update && sudo apt install packer
+    FILE9=/usr/bin/packer
+    if [ ! -f $FILE9 ]
+    then
+        if [ $arch == "aarch64" ]; then
+            wget -q https://releases.hashicorp.com/packer/$packerversion/packer_"$packerversion"_linux_arm64.zip
+            unzip packer_"$packerversion"_linux_arm64.zip
+            sudo mv packer /usr/bin/packer
+        else
+            wget -q https://releases.hashicorp.com/packer/$packerversion/packer_"$packerversion"_linux_amd64.zip
+            unzip packer_"$packerversion"_linux_amd64.zip
+            sudo mv packer /usr/bin/packer
+        fi
+    else
+        echo "packer binary found skipping install..."
+    fi
 }
 
 build_index() {
